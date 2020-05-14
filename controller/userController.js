@@ -3,7 +3,7 @@ const User = require('../app/models/userModel');
 exports.create = (req,res) => {
     
     // validate user
-    if(!req.body.content) {
+    if(!req.body.userName) {
         return res.send({
             message: "User cannot be empty"
         });
@@ -36,6 +36,28 @@ exports.getAll = (req,res) => {
     }).catch(err => {
         res.send( {
             message: err.message || "Error in fetching users data"
+        });
+    });
+};
+
+exports.loginUser = (req,res) => {
+    User.findOne({userName: req.body.userName})
+    .exec()
+    .then(user => {
+        if(user == null) {
+            return res.json({
+                message: 'Login Failed'
+            });
+        }
+        if(user.password == req.body.password) {
+            return res.json({
+                message: 'Login Sucessful'
+            });
+        }
+    })
+    .catch(err => {
+        res.send( {
+            message: err.message || "Invalid User"
         });
     });
 };
