@@ -28,3 +28,14 @@ exports.create = (req,res) => {
         });
     });
 };
+
+exports.getAll = (req,res) => {
+    User.find()
+    .then(users => {
+        res.send(users);
+    }).catch(err => {
+        res.send( {
+            message: err.message || "Error in fetching users data"
+        });
+    });
+};
