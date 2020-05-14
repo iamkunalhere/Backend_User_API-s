@@ -2,9 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
+const routes = require('./routes/routes.js');
 
 // to create express app
 const app = express();
+
+// initialize routes
+app.use(routes);
 
 // to parse the requests of content type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended:true}));
