@@ -7,9 +7,6 @@ const routes = require('./routes/routes.js');
 // to create express app
 const app = express();
 
-// initialize routes
-app.use(routes);
-
 // to parse the requests of content type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -32,6 +29,9 @@ mongoose.connect(dbConfig.url, {
 app.get('/', (req, res) => {
     res.json({"message": "Welcome to User Registration"});
 });
+
+// initialize routes
+app.use(routes);
 
 // listen for requests
 app.listen(4000, () => {

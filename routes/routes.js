@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const user = require('../controller/userController');
 
 // get a list of users from database
 router.get('/users', function(req,res) {
@@ -7,9 +8,7 @@ router.get('/users', function(req,res) {
 });
 
 // add new registration to database
-router.post('/users', function(req,res) {
-    res.send({type:'POST'});
-});
+router.post('/users',user.create);
 
 // update the user in database
 router.put('/users/:id', function(req,res) {
