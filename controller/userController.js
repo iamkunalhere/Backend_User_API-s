@@ -3,21 +3,21 @@ const User = require('../app/models/userModel');
 exports.create = (req,res) => {
     
     // validate user
-    if(!req.body.userName) {
+    if(!req.body.emailId || !req.body.userName) {
         return res.send({
             message: "User cannot be empty"
         });
     }
-    
-    // create new user
-    const user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        emailId: req.body.emailId,
-        userName: req.body.userName,
-        password: req.body.password
-    });
-
+    if(req.body.password == req.body.confirmPassword) {
+       // create new user
+        const user = new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            emailId: req.body.emailId,
+            userName: req.body.userName,
+            password: req.body.password
+        });
+    }
     // save user in database
     user.save()
     .then(data => {
@@ -41,7 +41,7 @@ exports.getAll = (req,res) => {
 };
 
 exports.loginUser = (req,res) => {
-    User.findOne({userName: req.body.userName})
+    User.findOne({emailId: req.body.emailId})
     .exec()
     .then(user => {
         if(user == null) {
@@ -49,7 +49,7 @@ exports.loginUser = (req,res) => {
                 message: 'Login Failed'
             });
         }
-        if(user.password == req.body.password) {
+        if(user.userName == req.body.userName && user.password == req.body.password) {
             return res.json({
                 message: 'Login Sucessful'
             });
