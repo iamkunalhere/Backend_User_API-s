@@ -2,31 +2,31 @@ const User = require('../app/models/userModel');
 
 exports.create = (req,res) => {
     
-    // validate user
-    if(!req.body.emailId || !req.body.userName) {
-        return res.send({
-            message: "User cannot be empty"
-        });
-    }
-    if(req.body.password == req.body.confirmPassword) {
        // create new user
         const user = new User({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             emailId: req.body.emailId,
             userName: req.body.userName,
-            password: req.body.password
+            password: req.body.password,
+            confirmPassword: req.body.confirmPassword,
+        });
+        if (user.password != user.confirmPassword) {
+            res.json({
+                message: 'Password not matched'
+            });
+        }
+        else {
+        // save user in database
+        user.save()
+        .then(data => {
+            res.send(data);
+        }).catch(err => {
+            res.send({
+                message: err.message || "Some error occurred"
+            });
         });
     }
-    // save user in database
-    user.save()
-    .then(data => {
-        res.send(data);
-    }).catch(err => {
-        res.send({
-            message: err.message || "Some error occurred"
-        });
-    });
 };
 
 exports.getAll = (req,res) => {
@@ -41,17 +41,22 @@ exports.getAll = (req,res) => {
 };
 
 exports.loginUser = (req,res) => {
-    User.findOne({emailId: req.body.emailId})
+    User.findOne({userName: req.body.userName})
     .exec()
     .then(user => {
         if(user == null) {
             return res.json({
-                message: 'Login Failed'
+                message: 'Invalid Username'
             });
         }
         if(user.userName == req.body.userName && user.password == req.body.password) {
             return res.json({
                 message: 'Login Sucessful'
+            });
+        }
+        else {
+            return res.json({
+                message: 'Invalid Password'
             });
         }
     })
