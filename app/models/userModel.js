@@ -5,11 +5,13 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     firstName: {
         type:String,
-        required:[true,'Invalid first name']
+        required:[true,'Invalid first name'],
+        match: /^[A-Z][a-z]{2}[a-z]*$/
     },
     lastName: {
         type:String,
-        required:[true,'Invalid last name']
+        required:[true,'Invalid last name'],
+        match: /^[A-Z][a-z]{2}[a-z]*$/
     },
     emailId: {
         type:String,
@@ -17,6 +19,7 @@ const userSchema = new Schema({
         index: {
             unique:true
         },
+        match: /^[a-z][a-z0-9]*[.+-]?[a-z0-9]+[@]{1}[a-z0-9]+[.]{1}[a-z]{2,3}([.]{1}[a-z]{2,3})?$/
     },
     userName: {
         type:String,
@@ -27,7 +30,8 @@ const userSchema = new Schema({
     },
     password: {
         type:String,
-        required:true
+        required:true,
+        match: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
     },
     confirmPassword: {
         type:String,
